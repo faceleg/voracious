@@ -13,6 +13,9 @@ import { SubscribableState, StateMapper } from './ruxx';
 import { startLoadingKuromoji } from './util/analysis';
 startLoadingKuromoji();
 
+const remoteMain = require('@electron/remote/main');
+remoteMain.initialize();
+
 // Set some last-ditch error handlers
 const { ipcRenderer } = window.require('electron'); // use window to avoid webpack
 

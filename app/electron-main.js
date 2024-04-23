@@ -1,4 +1,5 @@
 const {app, protocol, ipcMain, dialog, BrowserWindow, Menu} = require('electron');
+const remoteMain = require('@electron/remote/main');
 
 const path = require('path');
 const url = require('url');
@@ -54,8 +55,17 @@ function addIpcHandlers() {
 }
 
 function createWindow() {
+ 
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 1280, height: 720});
+  mainWindow = new BrowserWindow({
+    width: 1280,
+    height: 720,
+    webPreferences: {
+      nodeIntegration: true
+    }  
+  });
+
+  remoteMain.enable(mainWindow.webContents)
 
   // and load the index.html of the app.
   const startUrl = process.env.ELECTRON_START_URL || url.format({
@@ -127,7 +137,7 @@ if (process.platform === 'darwin') {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-  registerLocalProtocol();
+  // registerLocalProtocol();
   addIpcHandlers();
 
   const menu = Menu.buildFromTemplate(menuTemplate)
